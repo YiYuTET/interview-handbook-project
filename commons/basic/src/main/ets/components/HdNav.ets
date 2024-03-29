@@ -17,7 +17,12 @@ export struct HdNav {
   @BuilderParam
   titleBuilder: () => void
   @BuilderParam
-  menuBuilder: () => void
+  menuBuilder: () => void = this.defaultMenu
+
+  @Builder
+  defaultMenu() {
+
+  }
 
   build() {
     Row({ space: 16 }) {

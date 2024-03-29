@@ -11,6 +11,7 @@
     "pages/SettingsPage",
     "pages/ProfileEditPage",
     "pages/SearchPage",
-    "pages/BootPage"
+    "pages/BootPage",
+    "pages/OptionalPage"
   ]
 }

@@ -1,5 +1,6 @@
 import { authStore, getTimeText, HdClockIn, hdHttp, HdUser } from '@itcast/basic'
 import { promptAction, router } from '@kit.ArkUI'
+import { OptionalRouterParams, OptionalType } from './OptionalComp'
 
 interface Nav {
   icon: ResourceStr
@@ -172,9 +173,30 @@ export struct MineComp {
       .margin({ top: this.topHeight })
 
       GridRow({ columns: 4 }) {
-        this.navBuilder({ icon: $r('app.media.ic_mine_history'), name: '历史记录' })
-        this.navBuilder({ icon: $r('app.media.ic_mine_collect'), name: '我的收藏' })
-        this.navBuilder({ icon: $r('app.media.ic_mine_like'), name: '我的点赞' })
+        this.navBuilder({
+          icon: $r('app.media.ic_mine_history'), name: '历史记录', onClick: () => {
+            authStore.checkAuth({
+              url: 'pages/OptionalPage',
+              params: { type: OptionalType.HISTORY } as OptionalRouterParams
+            })
+          }
+        })
+        this.navBuilder({
+          icon: $r('app.media.ic_mine_collect'), name: '我的收藏', onClick: () => {
+            authStore.checkAuth({
+              url: 'pages/OptionalPage',
+              params: { type: OptionalType.COLLECT } as OptionalRouterParams
+            })
+          }
+        })
+        this.navBuilder({
+          icon: $r('app.media.ic_mine_like'), name: '我的点赞', onClick: () => {
+            authStore.checkAuth({
+              url: 'pages/OptionalPage',
+              params: { type: OptionalType.LIKE } as OptionalRouterParams
+            })
+          }
+        })
         this.navBuilder({
           icon: $r('app.media.ic_mine_study'),
           name: '累计学时',

@@ -24,7 +24,8 @@ export struct SearchHistoryComp {
     Flex({ direction: FlexDirection.Row, wrap: FlexWrap.Wrap }) {
       Row() {
         Text('搜索记录')
-          .fontColor($r('app.color.common_gray_03'))
+          .fontSize(15)
+          .fontColor($r('app.color.common_gray_01'))
         Blank()
         if (this.isDeleting) {
           Text() {
@@ -45,7 +46,7 @@ export struct SearchHistoryComp {
           Image($r('app.media.ic_public_delete'))
             .width(16)
             .aspectRatio(1)
-            .fillColor($r('app.color.common_gray_03'))
+            .fillColor($r('app.color.common_gray_01'))
             .onClick(() => {
               this.isDeleting = true
             })

@@ -1,15 +1,9 @@
-import { HdSearch } from '@itcast/basic'
+import { HdSearch, HdTab, HdTabItem } from '@itcast/basic'
 import { InterviewListComp } from '@itcast/interview'
 import { router } from '@kit.ArkUI'
 import { QuestionListComp } from '../components/QuestionListComp'
 import { SearchHistoryComp } from '../components/SearchHistoryComp'
 import { historyStore } from '../utils/history'
-
-interface TabItem {
-  name: string
-  value: 9 | 10
-  onAreaChange?: (area: Area) => void
-}
 
 interface RouterParams {
   type?: number
@@ -28,32 +22,15 @@ export struct SearchComp {
   isSearching: Boolean = false
   @State
   keyword: string = ''
+  // tab
+  tabConfig: HdTabItem[] = [
+    { name: '试题', value: 10 },
+    { name: '面经', value: 9 }
+  ]
 
   aboutToAppear(): void {
     const params = (router.getParams() || {}) as RouterParams
     this.questionBankType = params.questionBankType
-  }
-
-  // 设置线位置
-  setLineLeft(area: Area) {
-    const width = area.width as number
-    const x = area.position.x as number
-    this.left = x + (width - 20) / 2
-  }
-
-  @Builder
-  tabBuilder(tab: TabItem) {
-    Text(tab.name)
-      .fontSize(15)
-      .fontColor(this.questionBankType === tab.value ? $r('app.color.common_blue') : '#979797')
-      .animation({
-        duration: 300
-      })
-      .onClick((e) => {
-        this.setLineLeft(e.target.area)
-        this.questionBankType = tab.value
-      })
-      .onAreaChange((_o, n) => tab.onAreaChange && tab.onAreaChange(n))
   }
 
   build() {
@@ -80,44 +57,18 @@ export struct SearchComp {
           .layoutWeight(1)
         Text('取消')
           .fontSize(15)
-          .fontColor($r('app.color.common_blue'))
+          .fontColor($r('app.color.black'))
           .onClick(() => router.back())
       }
       .padding({ top: 15, left: 15, right: 15, bottom: 2 })
 
-      // 标签页
-      Row() {
-        Row({ space: 20 }) {
-          this.tabBuilder({
-            name: '试题', value: 10,
-            onAreaChange: (area) => {
-              if (this.questionBankType === 10) this.setLineLeft(area)
-            }
-          })
-          this.tabBuilder({
-            name: '面经', value: 9,
-            onAreaChange: (area) => {
-              if (this.questionBankType === 9) this.setLineLeft(area)
-            }
-          })
+      HdTab({
+        tabConfig: this.tabConfig,
+        activeIndex: this.questionBankType === 9 ? 1 : 0,
+        onTabClick: (item) => {
+          this.questionBankType = item.value as 9 | 10
         }
-        .width('100%')
-        .padding({ left: 15, right: 15 })
-        .height(40)
-        .border({
-          width: { bottom: $r('app.float.common_border_width') },
-          color: $r('app.color.common_gray_border')
-        })
-
-        Text()
-          .width(20)
-          .height(2)
-          .backgroundColor($r('app.color.common_blue'))
-          .position({ x: this.left, y: 38 })
-          .animation({
-            duration: 300
-          })
-      }
+      })
 
       if (this.isSearching) {
         if (this.questionBankType === 10) {

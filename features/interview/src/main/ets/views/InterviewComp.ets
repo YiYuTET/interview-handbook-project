@@ -1,15 +1,9 @@
-import { authStore, HdSearch } from '@itcast/basic'
+import { authStore, HdSearch, HdTab, HdTabItem } from '@itcast/basic'
 import { InterviewListComp } from '../components/InterviewListComp'
 
 interface Company {
   icon: ResourceStr
   count: number
-}
-
-interface TabItem {
-  name: string
-  value?: number
-  onAreaChange?: (area: Area) => void
 }
 
 @Component
@@ -20,12 +14,11 @@ export struct InterviewComp {
   sort: number | undefined = 30
   @StorageProp('topHeight')
   topHeight: number = 0
-
-  setLineLeft(area: Area) {
-    const width = area.width as number
-    const x = area.position.x as number
-    this.left = x + (width - 16) / 2
-  }
+  // tab
+  tabConfig: HdTabItem[] = [
+    { name: '推荐', value: 30 },
+    { name: '最新', value: undefined }
+  ]
 
   @Builder
   companyBuilder(com: Company) {
@@ -58,22 +51,6 @@ export struct InterviewComp {
     .borderRadius(8)
     .height(140)
     .width(100)
-  }
-
-  @Builder
-  tabBuilder(tab: TabItem) {
-    Text(tab.name)
-      .fontSize(14)
-      .padding(10)
-      .fontColor(this.sort === tab.value ? $r('app.color.black') : $r('app.color.common_gray_01'))
-      .animation({
-        duration: 300
-      })
-      .onClick((e) => {
-        this.setLineLeft(e.target.area)
-        this.sort = tab.value
-      })
-      .onAreaChange((_o, n) => tab.onAreaChange && tab.onAreaChange(n))
   }
 
   build() {
@@ -119,34 +96,13 @@ export struct InterviewComp {
       .backgroundColor($r('app.color.common_gray_bg'))
 
       // 标签页
-      Row() {
-        Row() {
-          this.tabBuilder({
-            name: '推荐', value: 30,
-            onAreaChange: (area) => {
-              this.setLineLeft(area)
-            }
-          })
-          this.tabBuilder({ name: '最新' })
+      HdTab({
+        tabConfig: this.tabConfig,
+        lineWidth: 16,
+        onTabChange: (item) => {
+          this.sort = item.value as number
         }
-        .width('100%')
-        .padding({ left: 16, right: 16 })
-        .height(40)
-        .border({
-          width: { bottom: $r('app.float.common_border_width') },
-          color: $r('app.color.common_gray_border')
-        })
-
-        Text()
-          .width(16)
-          .height(2)
-          .backgroundColor($r('app.color.black'))
-          .position({ x: this.left, y: 38 })
-          .animation({
-            duration: 300
-          })
-      }
-
+      })
       // 文章列表
       InterviewListComp({ sort: this.sort })
     }
