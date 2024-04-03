@@ -9,6 +9,7 @@ export interface InterviewItem {
   createdAt: string
   stage: string[]
   likeFlag: 0 | 1 | null
+  collectFlag: 0 | 1 | null
   relatedQuestions: InterviewRelatedQuestion[] | null
 }
 
@@ -35,6 +36,7 @@ export class InterviewItemModel implements InterviewItem {
   createdAt: string = ''
   stage: string[] = []
   likeFlag: 0 | 1 | null = null
+  collectFlag: 0 | 1 | null = null
   relatedQuestions: InterviewRelatedQuestion[] | null = null
 
   constructor(model: InterviewItem) {
@@ -49,6 +51,7 @@ export class InterviewItemModel implements InterviewItem {
     this.stage = model.stage
     this.likeFlag = model.likeFlag
     this.relatedQuestions = model.relatedQuestions
+    this.collectFlag = model.collectFlag
   }
 }
 
@@ -64,6 +67,7 @@ export const interviewListData: InterviewItem[] = [
     createdAt: '一周前',
     stage: ['大厂', '算法'],
     likeFlag: 1,
+    collectFlag: 0,
     relatedQuestions: []
   },
   {
@@ -77,6 +81,7 @@ export const interviewListData: InterviewItem[] = [
     createdAt: '10 小时前',
     stage: ['大厂', 'Java'],
     likeFlag: 0,
+    collectFlag: 0,
     relatedQuestions: []
   },
   {
@@ -90,6 +95,7 @@ export const interviewListData: InterviewItem[] = [
     createdAt: '23 分钟前',
     stage: ['国企', '实习'],
     likeFlag: 1,
+    collectFlag: 0,
     relatedQuestions: []
   }
 ]

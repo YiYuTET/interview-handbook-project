@@ -18,6 +18,8 @@ export struct HdNav {
   titleBuilder: () => void
   @BuilderParam
   menuBuilder: () => void = this.defaultMenu
+  onClickRight: () => void = () => {
+  }
 
   @Builder
   defaultMenu() {
@@ -50,6 +52,9 @@ export struct HdNav {
         Image(this.rightIcon)
           .size({ width: 24, height: 24 })
           .objectFit(ImageFit.Contain)
+          .onClick(() => {
+            this.onClickRight()
+          })
           .bindMenu(this.menuBuilder)
       } else {
         Blank()

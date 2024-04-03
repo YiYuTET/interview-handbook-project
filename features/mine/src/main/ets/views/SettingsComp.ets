@@ -140,6 +140,22 @@ export struct SettingsComp {
             })
           }
         })
+        this.toolsBuilder({
+          name: '隐私协议', onClick: () => {
+            interface WebParams {
+              src: string,
+              title: string
+            }
+
+            authStore.checkAuth({
+              url: 'pages/WebPage',
+              params: {
+                src: 'https://hm_harmony.gitee.io/static/pass_interview/user.html',
+                title: '隐私协议'
+              } as WebParams
+            })
+          }
+        })
         this.toolsBuilder({ name: '账号设置' })
         this.toolsBuilder({ name: '消息设置', radius: 2 })
         Blank().height(15)
@@ -156,7 +172,7 @@ export struct SettingsComp {
             this.clearCache()
           }
         })
-        this.toolsBuilder({ name: '检查更新', value: this.version, radius: 2 })
+        this.toolsBuilder({ name: '当前版本', value: this.version, radius: 2 })
         Blank().height(15)
         Text('退出账号')
           .height(50)

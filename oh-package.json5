@@ -6,7 +6,8 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@ohmos/calendar": "file:./commons/calendar"
+    "@ohmos/calendar": "file:./commons/calendar",
+    "dayjs": "latest"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.15",

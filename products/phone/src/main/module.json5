@@ -10,6 +10,11 @@
       {
         "name": "ohos.permission.KEEP_BACKGROUND_RUNNING"
       },
+      {
+        "name": "ohos.permission.MICROPHONE",
+        "reason": "$string:PhoneAbility_label",
+        "usedScene": {}
+      }
     ],
     "mainElement": "PhoneAbility",
     "deviceTypes": [
@@ -37,7 +42,7 @@
             ],
             "actions": [
               "action.system.home"
-            ]
+            ],
           }
         ]
       }
@@ -53,6 +58,30 @@
           {
             "name": "ohos.extension.form",
             "resource": "$profile:form_config"
+          }
+        ]
+      },
+      {
+        "name": "ShareExtAbility",
+        "srcEntry": "./ets/shareextability/ShareExtAbility.ets",
+        "description": "$string:ShareExtAbility_desc",
+        "label": "$string:ShareExtAbility_label",
+        "icon": "$media:icon",
+        "type": "share",
+        "skills": [
+          {
+            "actions": [
+              "ohos.want.action.sendData"
+            ],
+            "uris": [
+              {
+                "scheme": "hm",
+                "host": "pass_interview.itcast.com",
+                "path": "interview",
+                "utd": "general.symlink",
+                "maxFileSupported": 1
+              },
+            ]
           }
         ]
       }

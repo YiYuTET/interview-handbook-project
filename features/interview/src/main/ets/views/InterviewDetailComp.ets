@@ -1,7 +1,13 @@
 import { hdHttp, HdLoadingDialog, HdNav, HdTag, HdWeb } from '@itcast/basic/Index'
 import { InterviewItem, InterviewItemModel, InterviewRelatedQuestion } from '../models/InterviewItemModel'
 import { webview } from '@kit.ArkWeb'
-import { router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
+
+export interface OptPrams {
+  id: string,
+  type: number,
+  optType: 1 | 2
+}
 
 @Component
 export struct InterviewDetailComp {
@@ -31,11 +37,42 @@ export struct InterviewDetailComp {
     })
   }
 
+  /**
+   * 操作:点赞、收藏
+   * @param type = 1 | 2
+   */
+  async opt(optType: 1 | 2, flag: 0 | 1) {
+    try {
+      let data: OptPrams = {
+        id: this.item.id,
+        type: 1,
+        optType
+      }
+      await hdHttp.post<null>(flag === 1 ? 'question/opt' : 'question/unOpt', data)
+      if (optType === 1) {
+        this.item.likeFlag = flag
+        return promptAction.showToast({ message: flag === 1 ? '点赞成功' : '取消点赞' })
+      }
+      if (optType === 2) {
+        this.item.collectFlag = flag
+        return promptAction.showToast({ message: flag === 1 ? '收藏成功' : '取消收藏' })
+      }
+    } catch (err) {
+      promptAction.showToast({ message: '操作失败' })
+    }
+  }
+
   @Builder
   menuBuilder() {
     Menu() {
-      MenuItem({ content: '取消点赞' })
-      MenuItem({ content: '收藏' })
+      MenuItem({ content: this.item?.likeFlag === 1 ? '取消点赞' : '点赞' })
+        .onClick(() => {
+          this.opt(1, this.item.likeFlag === 1 ? 0 : 1)
+        })
+      MenuItem({ content: this.item?.collectFlag === 1 ? '取消收藏' : '收藏' })
+        .onClick(() => {
+          this.opt(2, this.item.collectFlag === 1 ? 0 : 1)
+        })
       MenuItem({ content: '分享' })
     }
     .width(108)
@@ -45,7 +82,9 @@ export struct InterviewDetailComp {
     Column() {
       HdNav({
         title: this.show ? this.item.stem : '',
-        menuBuilder: this.menuBuilder
+        menuBuilder: () => {
+          this.menuBuilder()
+        }
       })
 
       Column() {

@@ -12,6 +12,8 @@
     "pages/ProfileEditPage",
     "pages/SearchPage",
     "pages/BootPage",
-    "pages/OptionalPage"
+    "pages/OptionalPage",
+    "pages/WebPage",
+    "pages/AudioInterviewPage"
   ]
 }

@@ -1,6 +1,9 @@
-import { authStore, getTimeText, HdClockIn, hdHttp, HdUser } from '@itcast/basic'
+import { authStore, getTimeText, HdClockIn, hdHttp, HdUser, logger } from '@itcast/basic'
 import { promptAction, router } from '@kit.ArkUI'
 import { OptionalRouterParams, OptionalType } from './OptionalComp'
+import { systemShare } from '@kit.ShareKit'
+import { uniformTypeDescriptor } from '@kit.ArkData'
+import { common } from '@kit.AbilityKit'
 
 interface Nav {
   icon: ResourceStr
@@ -220,10 +223,40 @@ export struct MineComp {
             })
           }
         })
-        this.toolsBuilder({ icon: $r('app.media.ic_mine_ai'), name: '面通AI' })
-        this.toolsBuilder({ icon: $r('app.media.ic_mine_invite'), name: '推荐分享' })
-        this.toolsBuilder({ icon: $r('app.media.ic_mine_file'), name: '意见反馈' })
-        this.toolsBuilder({ icon: $r('app.media.ic_mine_info'), name: '关于我们' })
+        this.toolsBuilder({
+          icon: $r('app.media.ic_mine_ai'), name: '面通录音', onClick: () => {
+            authStore.checkAuth({
+              url: 'pages/AudioInterviewPage'
+            })
+          }
+        })
+        this.toolsBuilder({
+          icon: $r('app.media.ic_mine_invite'), name: '推荐分享', onClick: () => {
+            const data = new systemShare.SharedData({
+              utd: uniformTypeDescriptor.UniformDataType.HYPERLINK,
+              title: '面试通APP-搞定企业面试真题',
+              content: 'https://hm_harmony.gitee.io/static/pass_interview/download.html'
+            })
+            const controller = new systemShare.ShareController(data)
+            controller.on('dismiss', () => {
+              logger.info('分享结束')
+            })
+            controller.show(getContext() as common.UIAbilityContext, {
+              previewMode: systemShare.SharePreviewMode.DETAIL,
+              selectionMode: systemShare.SelectionMode.SINGLE
+            })
+          }
+        })
+        this.toolsBuilder({
+          icon: $r('app.media.ic_mine_file'), name: '意见反馈', onClick: () => {
+
+          }
+        })
+        this.toolsBuilder({
+          icon: $r('app.media.ic_mine_info'), name: '关于我们', onClick: () => {
+
+          }
+        })
         this.toolsBuilder({
           icon: $r('app.media.ic_mine_setting'), name: '设置', onClick: () => {
             authStore.checkAuth({

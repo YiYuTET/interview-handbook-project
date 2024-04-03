@@ -13,3 +13,5 @@ export { LoginComp } from './src/main/ets/views/LoginComp'
 export { ProfileEditComp } from './src/main/ets/views/ProfileEditComp'
 
 export { OptionalComp } from './src/main/ets/views/OptionalComp'
+
+export { AudioInterviewComp } from './src/main/ets/views/AudioInterviewComp'

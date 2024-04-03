@@ -31,6 +31,14 @@
     {
       "name": "widget_display_name",
       "value": "widget"
+    },
+    {
+      "name": "ShareExtAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "ShareExtAbility_label",
+      "value": "label"
     }
   ]
 }
