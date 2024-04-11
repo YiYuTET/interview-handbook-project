@@ -1,10 +1,32 @@
 import { HdNav, HdUser, logger } from '@itcast/basic/Index'
 import { abilityAccessCtrl, common } from '@kit.AbilityKit'
 import { audio } from '@kit.AudioKit'
-import { fileIo as fs, WriteOptions } from '@kit.CoreFileKit'
+import { fileIo as fs } from '@kit.CoreFileKit'
 import dayjs from 'dayjs'
 import { AudioInterviewDetailComp } from '../components/AudioInterviewDetailComp'
 import { audioDataManager } from '../manager/audioDataManager'
+
+function calcDB(pcm: ArrayBuffer) {
+  let sum = 0;
+  const pcmView = new DataView(pcm)
+  const numSamples = pcm.byteLength / 2
+  for (let i = 0; i < pcm.byteLength; i += 2) {
+    const samples = pcmView.getInt16(i, true)
+    sum += samples * samples
+  }
+  // 平均振幅
+  const meanSquare = sum / numSamples
+  // 计算RMS（均方根）振幅
+  const rmsAmplitude = Math.sqrt(meanSquare);
+  // 计算分贝
+  const decibels = 20 * Math.log10(rmsAmplitude / 32767);
+  const staticValue = 60
+  if (decibels >= Infinity) {
+    return staticValue;
+  } else {
+    return decibels + staticValue < 0 ? 0 : decibels + staticValue;
+  }
+}
 
 
 @Component
@@ -27,6 +49,16 @@ export struct AudioInterviewComp {
   opacityValue: number = 1
   @State
   activeItem: AudioItemModel | null = null
+  ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D()
+
+  drawDB(list: number[]) {
+    this.ctx.clearRect(0, 0, 300, 100)
+    this.ctx.fillStyle = '#3266EE'
+    this.ctx.fillRect(0, 49.5, 300, 1)
+    list.forEach((h, i) => {
+      this.ctx.fillRect(i, (100 - h * 1.6) / 2, 1, h * 1.6)
+    })
+  }
 
   aboutToAppear(): void {
     this.initPermissions()
@@ -103,14 +135,14 @@ export struct AudioInterviewComp {
           while (true) {
             let bufferSize = await this.audioCapture.getBufferSize();
             let buffer = await this.audioCapture.read(bufferSize, true);
-            let options: WriteOptions = {
-              offset: count * bufferSize,
-              length: bufferSize
-            };
             if (buffer) {
-              let number = fs.writeSync(file.fd, buffer, options);
-              this.dbList.push(this.calcDB(buffer))
+              let number = fs.writeSync(file.fd, buffer, {
+                offset: count * bufferSize,
+                length: bufferSize
+              });
               logger.info(`write data : ${number}`, buffer.byteLength.toString());
+              this.dbList.push(calcDB(buffer))
+              this.drawDB(this.dbList.slice(-300))
             }
             count++
           }
@@ -119,29 +151,7 @@ export struct AudioInterviewComp {
         }
       }
     } catch (e) {
-      logger.error('startRecord error', JSON.stringify(e));
-    }
-  }
-
-  calcDB(pcm: ArrayBuffer) {
-    let sum = 0;
-    const pcmView = new DataView(pcm)
-    const numSamples = pcm.byteLength / 2
-    for (let i = 0; i < pcm.byteLength; i += 2) {
-      const samples = pcmView.getInt16(i, true)
-      sum += samples * samples
-    }
-    // 平均振幅
-    const meanSquare = sum / numSamples
-    // 计算RMS（均方根）振幅
-    const rmsAmplitude = Math.sqrt(meanSquare);
-    // 计算分贝
-    const decibels = 20 * Math.log10(rmsAmplitude / 32767);
-    const staticValue = 60
-    if (decibels >= Infinity) {
-      return staticValue;
-    } else {
-      return decibels + staticValue < 0 ? 0 : decibels + staticValue;
+      logger.error('startRecord error', JSON.stringify(e.message));
     }
   }
 
@@ -273,23 +283,35 @@ export struct AudioInterviewComp {
         endMargin: 15
       })
 
-      Stack({ alignContent: Alignment.Center }) {
-        Row() {
-          ForEach(this.dbList.slice(-300), (db: number) => {
-            Text()
-              .width(1)
-              .height(db * 1.6)
-              .backgroundColor($r('app.color.common_blue'))
-          })
-        }
-        .width(300)
-        .height(100)
+      // Stack({ alignContent: Alignment.Center }) {
+      //   Row() {
+      //     ForEach(this.dbList.slice(-300), (db: number) => {
+      //       Text()
+      //         .width(1)
+      //         .height(db * 1.6)
+      //         .backgroundColor($r('app.color.common_blue'))
+      //     })
+      //   }
+      //   .width(300)
+      //   .height(100)
+      //
+      //   Text()
+      //     .height(0.5)
+      //     .width(300)
+      //     .backgroundColor($r('app.color.common_blue'))
+      // }
+      // .width('100%')
+      // .height(this.recording ? 100 : 0)
+      // .animation({ duration: 300 })
+      // .backgroundColor($r('app.color.common_gray_bg'))
+      // .clip(true)
 
-        Text()
-          .height(0.5)
+      Row() {
+        Canvas(this.ctx)
           .width(300)
-          .backgroundColor($r('app.color.common_blue'))
+          .height(100)
       }
+      .justifyContent(FlexAlign.Center)
       .width('100%')
       .height(this.recording ? 100 : 0)
       .animation({ duration: 300 })
@@ -305,9 +327,9 @@ export struct AudioInterviewComp {
             .onClick(async () => {
               if (this.recording) {
                 this.recording = false
-                this.dbList = []
                 await this.stopRecord()
               } else {
+                this.dbList = []
                 this.recording = true
                 await this.startRecord()
               }

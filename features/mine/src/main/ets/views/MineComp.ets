@@ -232,19 +232,21 @@ export struct MineComp {
         })
         this.toolsBuilder({
           icon: $r('app.media.ic_mine_invite'), name: '推荐分享', onClick: () => {
-            const data = new systemShare.SharedData({
-              utd: uniformTypeDescriptor.UniformDataType.HYPERLINK,
-              title: '面试通APP-搞定企业面试真题',
-              content: 'https://hm_harmony.gitee.io/static/pass_interview/download.html'
-            })
-            const controller = new systemShare.ShareController(data)
-            controller.on('dismiss', () => {
-              logger.info('分享结束')
-            })
-            controller.show(getContext() as common.UIAbilityContext, {
-              previewMode: systemShare.SharePreviewMode.DETAIL,
-              selectionMode: systemShare.SelectionMode.SINGLE
-            })
+            if (systemShare?.SharedData) {
+              const data = new systemShare.SharedData({
+                utd: uniformTypeDescriptor.UniformDataType.HYPERLINK,
+                title: '面试通APP-搞定企业面试真题',
+                content: 'https://hm_harmony.gitee.io/static/pass_interview/download.html'
+              })
+              const controller = new systemShare.ShareController(data)
+              controller.on('dismiss', () => {
+                logger.info('分享结束')
+              })
+              controller.show(getContext() as common.UIAbilityContext, {
+                previewMode: systemShare.SharePreviewMode.DETAIL,
+                selectionMode: systemShare.SelectionMode.SINGLE
+              })
+            }
           }
         })
         this.toolsBuilder({
