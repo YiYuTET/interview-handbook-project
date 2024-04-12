@@ -11,5 +11,3 @@
 **/.test
 .DS_Store
 /dependencies
-/commons/calendar
-/commons/json_bigint

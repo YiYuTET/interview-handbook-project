@@ -1,10 +1,11 @@
 import { HdNav, HdUser, logger } from '@itcast/basic/Index'
 import { abilityAccessCtrl, common } from '@kit.AbilityKit'
 import { audio } from '@kit.AudioKit'
-import { fileIo as fs } from '@kit.CoreFileKit'
+import { fileIo as fs, WriteOptions } from '@kit.CoreFileKit'
 import dayjs from 'dayjs'
 import { AudioInterviewDetailComp } from '../components/AudioInterviewDetailComp'
 import { audioDataManager } from '../manager/audioDataManager'
+import { promptAction } from '@kit.ArkUI'
 
 function calcDB(pcm: ArrayBuffer) {
   let sum = 0;
@@ -49,7 +50,9 @@ export struct AudioInterviewComp {
   opacityValue: number = 1
   @State
   activeItem: AudioItemModel | null = null
-  ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D()
+  private settings: RenderingContextSettings = new RenderingContextSettings(true)
+  private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
+  hasPermissions: boolean = false
 
   drawDB(list: number[]) {
     this.ctx.clearRect(0, 0, 300, 100)
@@ -68,7 +71,7 @@ export struct AudioInterviewComp {
   }
 
   aboutToDisappear(): void {
-    this.releaseRecord()
+    this.startRecord()
   }
 
   initPermissions() {
@@ -78,14 +81,17 @@ export struct AudioInterviewComp {
       "ohos.permission.MICROPHONE",
     ]).then((res) => {
       if (res.authResults.every(v => v === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED)) {
-        this.initAudioCapture()
+        this.hasPermissions = true
       }
     })
   }
 
   audioCapture: audio.AudioCapturer | null = null
 
-  async initAudioCapture() {
+  async startRecord() {
+    if (!this.hasPermissions) {
+      return promptAction.showToast({ message: '未授权使用麦克风' })
+    }
     try {
       const audioStreamInfo: audio.AudioStreamInfo = {
         samplingRate: audio.AudioSamplingRate.SAMPLE_RATE_16000,
@@ -103,56 +109,35 @@ export struct AudioInterviewComp {
       }
       this.audioCapture = await audio.createAudioCapturer(audioCapturerOptions)
       logger.info('initAudioCapture success');
+      this.fileTimestamp = Date.now()
+      this.bufferSize = 0
+      this.audioCapture.on('readData', (b) => this.readDataCallback(b))
+      const stateGroup = [audio.AudioState.STATE_PREPARED, audio.AudioState.STATE_PAUSED, audio.AudioState.STATE_STOPPED]
+      if (stateGroup.includes(this.audioCapture.state)) {
+        await this.audioCapture.start()
+      } else {
+        logger.error('startRecord error', 'state error');
+      }
     } catch (e) {
       logger.error('initAudioCapture error', e.message);
     }
   }
 
   fileTimestamp: number = 0
+  bufferSize: number = 0
 
-  async startRecord() {
-    try {
-      if (this.audioCapture) {
-        const stateGroup = [audio.AudioState.STATE_PREPARED, audio.AudioState.STATE_PAUSED, audio.AudioState.STATE_STOPPED]
-        if (stateGroup.includes(this.audioCapture.state)) {
-          // let bufferSize = 0
-          // const readDataCallback = (buffer: ArrayBuffer) => {
-          //   const filePath = getContext(this).filesDir + `/${Date.now()}.wav`;
-          //   const file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-          //   const options: WriteOptions = {
-          //     offset: bufferSize,
-          //     length: buffer.byteLength
-          //   }
-          //   fs.writeSync(file.fd, buffer, options);
-          //   bufferSize += buffer.byteLength;
-          // }
-          // this.audioCapture.on('readData', readDataCallback)
-          await this.audioCapture.start()
-          let count = 0
-          this.fileTimestamp = Date.now()
-          const filePath = getContext(this).filesDir + `/${this.fileTimestamp}.wav`;
-          const file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-          while (true) {
-            let bufferSize = await this.audioCapture.getBufferSize();
-            let buffer = await this.audioCapture.read(bufferSize, true);
-            if (buffer) {
-              let number = fs.writeSync(file.fd, buffer, {
-                offset: count * bufferSize,
-                length: bufferSize
-              });
-              logger.info(`write data : ${number}`, buffer.byteLength.toString());
-              this.dbList.push(calcDB(buffer))
-              this.drawDB(this.dbList.slice(-300))
-            }
-            count++
-          }
-        } else {
-          logger.error('startRecord error', 'state error');
-        }
-      }
-    } catch (e) {
-      logger.error('startRecord error', JSON.stringify(e.message));
+  readDataCallback(buffer: ArrayBuffer) {
+    const filePath = getContext(this).filesDir + `/${this.fileTimestamp}.wav`;
+    const file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+    const options: WriteOptions = {
+      offset: this.bufferSize,
+      length: buffer.byteLength
     }
+    fs.writeSync(file.fd, buffer, options);
+    this.bufferSize += buffer.byteLength;
+    logger.info('startRecord', this.bufferSize.toString());
+    this.dbList.push(calcDB(buffer))
+    this.drawDB(this.dbList.slice(-300))
   }
 
   // 停止采集
@@ -162,6 +147,7 @@ export struct AudioInterviewComp {
         || this.audioCapture.state === audio.AudioState.STATE_PAUSED) {
         try {
           await this.audioCapture.stop()
+          await this.audioCapture.release()
           const filePath = getContext(this).filesDir + `/${this.fileTimestamp}.wav`;
           const stat = fs.statSync(filePath)
           const item = new AudioItemModel({
@@ -183,23 +169,6 @@ export struct AudioInterviewComp {
         }
       } else {
         logger.error('stopRecord error', 'state error');
-      }
-    }
-  }
-
-  // 销毁实例，释放资源
-  async releaseRecord() {
-    if (this.audioCapture) {
-      if (this.audioCapture.state !== audio.AudioState.STATE_RELEASED
-        && this.audioCapture.state !== audio.AudioState.STATE_NEW) {
-        try {
-          await this.audioCapture.release()
-          logger.info('releaseRecord success');
-        } catch (e) {
-          logger.error('releaseRecord error', e.message);
-        }
-      } else {
-        logger.error('releaseRecord error', 'state error');
       }
     }
   }
@@ -328,8 +297,9 @@ export struct AudioInterviewComp {
               if (this.recording) {
                 this.recording = false
                 await this.stopRecord()
-              } else {
                 this.dbList = []
+                this.drawDB([])
+              } else {
                 this.recording = true
                 await this.startRecord()
               }

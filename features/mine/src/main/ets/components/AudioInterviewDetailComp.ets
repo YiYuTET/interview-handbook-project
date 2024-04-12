@@ -1,7 +1,7 @@
 import { AudioItemModel } from '../views/AudioInterviewComp'
 import { audio } from '@kit.AudioKit'
 import { logger } from '@itcast/basic/Index'
-import { fileIo as fs } from '@kit.CoreFileKit'
+import { fileIo as fs, ReadOptions } from '@kit.CoreFileKit'
 
 @Component
 export struct AudioInterviewDetailComp {
@@ -10,8 +10,10 @@ export struct AudioInterviewDetailComp {
   @Prop
   activeItem: AudioItemModel | null
   audioRenderer: audio.AudioRenderer | null = null
-  @Prop total: number = 0
-  @Prop value: number = 0
+  @State
+  totalSize: number = 0
+  @State
+  bufferSize: number = 0
 
   aboutToAppear(): void {
     this.initAudioRenderer()
@@ -35,8 +37,25 @@ export struct AudioInterviewDetailComp {
         rendererInfo: audioRendererInfo
       }
       this.audioRenderer = await audio.createAudioRenderer(audioRendererOptions)
+      this.audioRenderer.on('writeData', (b) => this.writeDataCallback(b))
     } catch (e) {
       logger.error('initAudioRenderer', JSON.stringify(e))
+    }
+  }
+
+  writeDataCallback(buffer: ArrayBuffer) {
+    //确保该路径下存在该资源
+    const file = fs.openSync(this.activeItem?.path, fs.OpenMode.READ_ONLY);
+    const stat = fs.statSync(file.fd)
+    this.totalSize = stat.size
+    const options: ReadOptions = {
+      offset: this.bufferSize,
+      length: buffer.byteLength
+    }
+    fs.readSync(file.fd, buffer, options);
+    this.bufferSize += buffer.byteLength;
+    if (this.bufferSize >= this.totalSize) {
+      this.stop()
     }
   }
 
@@ -44,25 +63,7 @@ export struct AudioInterviewDetailComp {
     if (this.audioRenderer) {
       try {
         this.playing = true
-        this.audioRenderer.on('stateChange', (state) => {
-          logger.info('state change', state.toString())
-        })
         await this.audioRenderer.start()
-        const bufferSize = await this.audioRenderer.getBufferSize()
-        const file = fs.openSync(this.activeItem?.path, fs.OpenMode.READ_ONLY);
-        const stat = fs.statSync(this.activeItem?.path)
-        const buf = new ArrayBuffer(bufferSize);
-        const len = stat.size % bufferSize == 0 ? Math.floor(stat.size / bufferSize) : Math.floor(stat.size / bufferSize + 1);
-        this.total = len
-        for (let i = 0; i < len; i++) {
-          fs.readSync(file.fd, buf, {
-            offset: i * bufferSize,
-            length: bufferSize
-          })
-          await this.audioRenderer?.write(buf)
-          this.value = i
-        }
-        this.stop()
       } catch (e) {
         logger.error('audioRenderer play', JSON.stringify(e))
       }
@@ -71,8 +72,13 @@ export struct AudioInterviewDetailComp {
 
   async stop() {
     if (this.audioRenderer) {
-      await this.audioRenderer.stop()
-      this.playing = false
+      try {
+        await this.audioRenderer.stop()
+        this.playing = false
+        this.bufferSize = 0
+      } catch (e) {
+        logger.error('audioRenderer stop', JSON.stringify(e))
+      }
     }
   }
 
@@ -106,7 +112,7 @@ export struct AudioInterviewDetailComp {
               this.stop()
             }
           })
-        Progress({ value: this.value, total: this.total })
+        Progress({ value: this.bufferSize, total: this.totalSize })
           .layoutWeight(1)
           .margin({ top: 20, bottom: 20 })
       }
