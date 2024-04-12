@@ -232,7 +232,7 @@ export struct MineComp {
         })
         this.toolsBuilder({
           icon: $r('app.media.ic_mine_invite'), name: '推荐分享', onClick: () => {
-            if (systemShare?.SharedData) {
+            try {
               const data = new systemShare.SharedData({
                 utd: uniformTypeDescriptor.UniformDataType.HYPERLINK,
                 title: '面试通APP-搞定企业面试真题',
@@ -246,6 +246,8 @@ export struct MineComp {
                 previewMode: systemShare.SharePreviewMode.DETAIL,
                 selectionMode: systemShare.SelectionMode.SINGLE
               })
+            } catch (e) {
+              logger.error('分享失败')
             }
           }
         })
