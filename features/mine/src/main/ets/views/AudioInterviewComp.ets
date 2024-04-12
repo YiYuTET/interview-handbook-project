@@ -71,7 +71,7 @@ export struct AudioInterviewComp {
   }
 
   aboutToDisappear(): void {
-    this.startRecord()
+    this.stopRecord()
   }
 
   initPermissions() {
