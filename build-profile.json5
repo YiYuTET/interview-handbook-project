@@ -73,6 +73,10 @@
     {
       "name": "json_bigint",
       "srcPath": "./commons/json_bigint"
+    },
+    {
+      "name": "path_to_regexp",
+      "srcPath": "./commons/path_to_regexp",
     }
   ]
 }

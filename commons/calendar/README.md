@@ -4,7 +4,7 @@
 
 一个支持三种模式的轻量级日历组件：
 
-- 支持常规日历，全月日期、切换月份、点击反馈、标注显示
+- 支持常规日历，全月日期、切换月份、点击反馈、标注显示、controller控制、选中样式、国际化、深色模式
 - 支持超级迷你日历，全月日期、当前时间
 - 支持单周日历，当周日期、当前时间
 
@@ -133,8 +133,9 @@ struct Index {
 | gutter        | `number`                  | 迷你日历槽距 | `4`                             |
 | format        | `string`                  | 日期格式   | `YYYY-MM-DD`                    |
 | weeks         | `ResourceStr[]`           | 周标题文字  | `['日','一','二','三','四','五','六']` |
-
-### 类型
+| radius        | `Length \ BorderRadiuses` | 选中背景圆角 | `14`                            |
+| rowsAuto      | `boolean`                 | 行数自动   | `false`                         |
+| controller    | `HmCalendarController`    | 控制器    | -                               |
 
 - HmCalendarSelectedDay
 
@@ -144,6 +145,7 @@ interface HmCalendarSelectedDay {
   text?: ResourceStr
   textColor?: ResourceColor
   backgroundColor?: ResourceColor
+  borderRadius?: Length | BorderRadiuses
 }
 ```
 
@@ -154,6 +156,17 @@ enum HmCalendarType {
   MONTH,
   WEEK,
   MONTH_DOT
+}
+```
+
+- HmCalendarController
+
+```arkts
+export class HmCalendarController {
+  prevMonth: () => void = defaultFn
+  nextMonth: () => void = defaultFn
+  currentMonth: () => void = defaultFn
+  toggleMonth: (dateStr: string) => void = defaultFn
 }
 ```
 

@@ -5,6 +5,8 @@ import window from '@ohos.window';
 import { rpc } from '@kit.IPCKit';
 import { logger } from '@itcast/basic';
 import { emitter } from '@kit.BasicServicesKit';
+import { connection } from '@kit.NetworkKit';
+import promptAction from '@ohos.promptAction';
 
 class MyParcelable implements rpc.Parcelable {
   marshalling(dataOut: rpc.MessageSequence): boolean {
@@ -65,7 +67,20 @@ export default class PhoneAbility extends UIAbility {
         return;
       }
       logger.info('Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
-
+      // net
+      const conn = connection.createNetConnection()
+      conn.register(() => {
+        conn.on('netUnavailable', () => {
+          promptAction.showToast({
+            message: '网络不可用'
+          })
+        })
+        conn.on('netAvailable', () => {
+          promptAction.showToast({
+            message: '网络正常'
+          })
+        })
+      })
     });
   }
 

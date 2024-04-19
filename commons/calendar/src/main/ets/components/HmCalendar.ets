@@ -1,10 +1,12 @@
 import dayjs from 'dayjs'
+import { HmCalendarController } from '../controllers/HmCalendarController'
 
 export interface HmCalendarSelectedDay {
   date: string
   text?: ResourceStr
   textColor?: ResourceColor
   backgroundColor?: ResourceColor
+  borderRadius?: Length | BorderRadiuses
 }
 
 export enum HmCalendarType {
@@ -23,6 +25,7 @@ interface HmCalendarItem {
   selectedText?: ResourceStr
   selectedTextColor?: ResourceColor
   selectedBackgroundColor?: ResourceColor
+  selectedBorderRadius?: Length | BorderRadiuses
 }
 
 @Component
@@ -41,6 +44,8 @@ export struct HmCalendar {
   private text: ResourceStr = $r('app.string.hm_calendar_clocked')
   // default selected color
   private color: ResourceColor = $r('app.color.hm_calendar_color')
+  // default selected radius
+  private radius: Length | BorderRadiuses = 14
   // default date format rule
   private format: string = 'YYYY-MM-DD'
   // selected day from parent component
@@ -51,15 +56,19 @@ export struct HmCalendar {
   @Watch('onUpdateData')
   currentDate: string = dayjs().format(this.format)
   // click date event
-  onClickDate: (date: string) => void = () => 0
+  private onClickDate: (date: string) => void = () => 0
   // change month event
-  onChangeMonth: (month: string) => void = () => 0
+  private onChangeMonth: (month: string) => void = () => 0
   // calendar type
-  type: HmCalendarType = HmCalendarType.MONTH
+  private type: HmCalendarType = HmCalendarType.MONTH
   // calendar gutter
-  gutter: number = 4
+  private gutter: number = 4
   @State
   items: HmCalendarItem[] = []
+  // calendar controller
+  private controller: HmCalendarController | null = null
+  // calendar rows
+  private rowsAuto: boolean = false
 
   // init calendar data
   genData() {
@@ -76,6 +85,7 @@ export struct HmCalendar {
       const selectedText: ResourceStr = selectedDay?.text || this.text
       const selectedTextColor: ResourceColor = selectedDay?.textColor || this.color
       const selectedBackgroundColor: ResourceColor = selectedDay?.backgroundColor || this.color
+      const selectedBorderRadius: Length | BorderRadiuses = selectedDay?.borderRadius || this.radius
 
       items.push({
         date: index,
@@ -86,7 +96,8 @@ export struct HmCalendar {
         selectedFlag,
         selectedText,
         selectedTextColor,
-        selectedBackgroundColor
+        selectedBackgroundColor,
+        selectedBorderRadius
       })
     }
     if (this.type === HmCalendarType.MONTH || this.type === HmCalendarType.WEEK) {
@@ -105,8 +116,11 @@ export struct HmCalendar {
       }
       // next month
       const nextMonth = currDate.date(currDays + 1)
-      const start = items.length
-      for (let index = 1; index <= LEN - start; index++) {
+      let appends = LEN - items.length
+      if (this.rowsAuto) {
+        appends = items.length > 35 ? LEN - items.length : LEN - items.length - 7
+      }
+      for (let index = 1; index <= appends; index++) {
         items.push({
           date: index,
           month: nextMonth.month() + 1,
@@ -126,6 +140,36 @@ export struct HmCalendar {
 
   aboutToAppear() {
     this.items = this.genData()
+    if (this.controller) {
+      this.controller.prevMonth = () => {
+        this.prevMonth()
+      }
+      this.controller.nextMonth = () => {
+        this.nextMonth()
+      }
+      this.controller.currentMonth = () => {
+        const date = dayjs()
+        this.currentDate = date.format(this.format)
+        this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
+      }
+      this.controller.toggleMonth = (dateStr: string) => {
+        const date = dayjs(dateStr)
+        this.currentDate = date.format(this.format)
+        this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
+      }
+    }
+  }
+
+  prevMonth() {
+    const date = dayjs(this.currentDate).subtract(1, 'month')
+    this.currentDate = date.format(this.format)
+    this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
+  }
+
+  nextMonth() {
+    const date = dayjs(this.currentDate).add(1, 'month')
+    this.currentDate = date.format(this.format)
+    this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
   }
 
   onUpdateData() {
@@ -154,9 +198,7 @@ export struct HmCalendar {
           Row() {
             Blank()
             this.btnBuilder($r('app.media.ic_public_arrow_left'), () => {
-              const date = dayjs(this.currentDate).subtract(1, 'month')
-              this.currentDate = date.format(this.format)
-              this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
+              this.prevMonth()
             })
             Text(dayjs(this.currentDate).format('YYYY-MM'))
               .width(100)
@@ -165,9 +207,7 @@ export struct HmCalendar {
               .fontColor($r('app.color.hm_calendar_valid'))
               .fontWeight(500)
             this.btnBuilder($r('app.media.ic_public_arrow_right'), () => {
-              const date = dayjs(this.currentDate).add(1, 'month')
-              this.currentDate = date.format(this.format)
-              this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
+              this.nextMonth()
             })
             Blank()
           }
@@ -199,7 +239,7 @@ export struct HmCalendar {
                     .width(28)
                     .aspectRatio(1)
                     .textAlign(TextAlign.Center)
-                    .borderRadius(14)
+                    .borderRadius(item.selectedBorderRadius)
                     .fontColor(Color.White)
                     .backgroundColor(item.selectedBackgroundColor)
                   Text(item.selectedText)

@@ -1,0 +1,16 @@
+{
+  "name": "@ohmos/path-to-regexp",
+  "version": "6.2.2",
+  "description": "Turn a path string such as `/user/:name` into a regular expression.",
+  "keywords": [
+    "path-to-regexp"
+  ],
+  "main": "Index.ets",
+  "license": "Apache-2.0",
+  "author": {
+    "email": "zhousg1007@qq.com",
+    "name": 'zhousg'
+  },
+  "repository": "https://github.com/HarmonyOS-Next",
+  "homepage": "https://github.com/HarmonyOS-Next"
+}

@@ -1,5 +1,12 @@
 # Changelog
 
+## Release 2.1.2
+
+- add selected item radius
+- add calendar row auto
+- add controller changeMonth
+- add dark mode
+
 ## Release 2.0.2
 
 - fix: month dot layout
