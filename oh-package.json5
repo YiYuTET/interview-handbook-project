@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@ohmos/calendar": "file:commons/calendar",
+    "@ohmos/calendar": "2.1.2",
     "dayjs": "latest"
   },
   "devDependencies": {

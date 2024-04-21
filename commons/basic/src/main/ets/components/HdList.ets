@@ -91,7 +91,9 @@ export struct HdList {
         color: $r('app.color.common_gray_border')
       })
       .onReachEnd(() => {
-        if (this.loading || this.refreshing || this.finished) return;
+        if (this.loading || this.refreshing || this.finished) {
+          return;
+        }
         this.loading = true
         this.onLoad()
       })
@@ -106,7 +108,9 @@ export struct HdList {
     .height('100%')
     .layoutWeight(this.lw)
     .onRefreshing(() => {
-      if (this.loading || this.refreshing) return;
+      if (this.loading) {
+        return;
+      }
       this.finished = false
       this.onRefresh()
       // tip: must next tick

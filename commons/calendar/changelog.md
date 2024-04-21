@@ -2,6 +2,10 @@
 
 ## Release 2.1.2
 
+- chore: remove private handle warn
+
+## Release 2.1.2
+
 - add selected item radius
 - add calendar row auto
 - add controller changeMonth

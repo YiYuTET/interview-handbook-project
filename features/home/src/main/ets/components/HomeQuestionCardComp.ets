@@ -41,7 +41,7 @@ enum LinerColorType {
   ORANGE,
 }
 
-const LINEAR_COLOR = [
+const LINEAR_COLOR: [ResourceColor, number][][] = [
   [['#026bf1', 0], ['#52d3ff', 1]],
   [['#fe6544', 0], ['#fdd081', 1]],
   [['#1FDE06', 0], ['#61F27A', 1]],

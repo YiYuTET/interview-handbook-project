@@ -31,7 +31,7 @@ interface HmCalendarItem {
 @Component
 export struct HmCalendar {
   // week labels
-  private weeks: ResourceStr[] = [
+  weeks: ResourceStr[] = [
     $r('app.string.hm_calendar_sunday'),
     $r('app.string.hm_calendar_monday'),
     $r('app.string.hm_calendar_tuesday'),
@@ -41,34 +41,35 @@ export struct HmCalendar {
     $r('app.string.hm_calendar_saturday'),
   ]
   // default selected text
-  private text: ResourceStr = $r('app.string.hm_calendar_clocked')
+  text: ResourceStr = $r('app.string.hm_calendar_clocked')
   // default selected color
-  private color: ResourceColor = $r('app.color.hm_calendar_color')
+  color: ResourceColor = $r('app.color.hm_calendar_color')
   // default selected radius
-  private radius: Length | BorderRadiuses = 14
+  radius: Length | BorderRadiuses = 14
   // default date format rule
-  private format: string = 'YYYY-MM-DD'
+  format: string = 'YYYY-MM-DD'
   // selected day from parent component
   @Prop
   @Watch('onUpdateData')
   selectedDays: HmCalendarSelectedDay[] = []
   @Prop
   @Watch('onUpdateData')
-  currentDate: string = dayjs().format(this.format)
+  currentDate: string = dayjs()
+    .format(this.format)
   // click date event
-  private onClickDate: (date: string) => void = () => 0
+  onClickDate: (date: string) => void = () => 0
   // change month event
-  private onChangeMonth: (month: string) => void = () => 0
+  onChangeMonth: (month: string) => void = () => 0
   // calendar type
-  private type: HmCalendarType = HmCalendarType.MONTH
+  type: HmCalendarType = HmCalendarType.MONTH
   // calendar gutter
-  private gutter: number = 4
+  gutter: number = 4
   @State
   items: HmCalendarItem[] = []
   // calendar controller
-  private controller: HmCalendarController | null = null
+  controller: HmCalendarController | null = null
   // calendar rows
-  private rowsAuto: boolean = false
+  rowsAuto: boolean = false
 
   // init calendar data
   genData() {
@@ -80,7 +81,8 @@ export struct HmCalendar {
     // current month
     const currDays = currDate.daysInMonth()
     for (let index = 1; index <= currDays; index++) {
-      const selectedDay = selectedDays.find(item => currDate.date(index).isSame(item.date, 'date'))
+      const selectedDay = selectedDays.find(item => currDate.date(index)
+        .isSame(item.date, 'date'))
       const selectedFlag = !!selectedDay
       const selectedText: ResourceStr = selectedDay?.text || this.text
       const selectedTextColor: ResourceColor = selectedDay?.textColor || this.color
@@ -91,7 +93,8 @@ export struct HmCalendar {
         date: index,
         month: currDate.month() + 1,
         year: currDate.year(),
-        day: currDate.date(index).day(),
+        day: currDate.date(index)
+          .day(),
         inMonth: true,
         selectedFlag,
         selectedText,
@@ -161,13 +164,15 @@ export struct HmCalendar {
   }
 
   prevMonth() {
-    const date = dayjs(this.currentDate).subtract(1, 'month')
+    const date = dayjs(this.currentDate)
+      .subtract(1, 'month')
     this.currentDate = date.format(this.format)
     this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
   }
 
   nextMonth() {
-    const date = dayjs(this.currentDate).add(1, 'month')
+    const date = dayjs(this.currentDate)
+      .add(1, 'month')
     this.currentDate = date.format(this.format)
     this.onChangeMonth && this.onChangeMonth(date.format('YYYY-MM'))
   }
@@ -200,7 +205,8 @@ export struct HmCalendar {
             this.btnBuilder($r('app.media.ic_public_arrow_left'), () => {
               this.prevMonth()
             })
-            Text(dayjs(this.currentDate).format('YYYY-MM'))
+            Text(dayjs(this.currentDate)
+              .format('YYYY-MM'))
               .width(100)
               .textAlign(TextAlign.Center)
               .fontSize(15)
@@ -259,7 +265,8 @@ export struct HmCalendar {
               .height(50)
               .justifyContent(FlexAlign.Center)
               .onClick(() => {
-                const date = `${item.year}-${item.month.toString().padStart(2, '0')}-${item.date.toString()
+                const date = `${item.year}-${item.month.toString()
+                  .padStart(2, '0')}-${item.date.toString()
                   .padStart(2, '0')}`
                 this.onClickDate && this.onClickDate(date)
               })
@@ -268,8 +275,7 @@ export struct HmCalendar {
         }
         .margin({ left: 6, right: 6 })
       }
-    }
-    else {
+    } else {
       GridRow({ columns: 7, gutter: this.gutter }) {
         ForEach(this.items, (item: HmCalendarItem) => {
           GridCol(item.date === 1 ? { offset: item.day } : {}) {

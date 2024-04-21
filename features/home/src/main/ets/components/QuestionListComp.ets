@@ -39,15 +39,16 @@ export struct QuestionListComp {
       page: this.page,
       sort: this.sort,
       keyword: this.keyword
-    }).then(res => {
-      this.list.push(...res.data.rows)
-      this.controller.loaded()
-      if (this.page < res.data.pageTotal) {
-        this.page++
-      } else {
-        this.controller.finished()
-      }
     })
+      .then(res => {
+        this.list.push(...res.data.rows)
+        this.controller.loaded()
+        if (this.page < res.data.pageTotal) {
+          this.page++
+        } else {
+          this.controller.finished()
+        }
+      })
 
   }
 
@@ -66,21 +67,24 @@ export struct QuestionListComp {
         sort: this.sort,
         keyword: this.keyword
       })
-    ]).then(arr => {
-      this.list = arr[1].data.rows
-      this.controller.refreshed()
-      promptAction.showToast({ message: '已更新' })
-      if (this.page < arr[1].data.pageTotal) {
-        this.page++
-      } else {
-        this.controller.finished()
-      }
-    })
+    ])
+      .then(arr => {
+        this.list = arr[1].data.rows
+        this.controller.refreshed()
+        promptAction.showToast({ message: '已更新' })
+        if (this.page < arr[1].data.pageTotal) {
+          this.page++
+        } else {
+          this.controller.finished()
+        }
+      })
   }
 
   reLoad() {
     if (this.list.length && this.activeIndex === this.selfIndex) {
-      if (this.timer) clearTimeout(this.timer)
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
       this.timer = setTimeout(() => {
         this.controller.reload()
         this.onRefresh()
