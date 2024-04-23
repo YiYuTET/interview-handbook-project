@@ -13,23 +13,25 @@
 
 项目整体基于ArkTs + ArkUI + Api9 + Stage模式
 
+后端数据接口：https://api-harmony-teach.itheima.net/hm/
+
 具体包含功能如下：
 
 1、常用组件的提取；
 
-2、网络请求的基础封装(基于axios)；
+2、网络请求的基础封装(基于Promise)；
 
 3、封装项目页面多状态（加载中，成功，失败，空数据）；
 
-4、视频播放以及视频列表播放；
+4、router页面路由；
 
-5、列表页面刷新加载示例等
+5、LocalStorage页面状态存储；
 
-6、新增EventBus和Storage使用模板
+6、新增mediaQuery使用模板
 
 7、添加全局loading实现
 
-8、mock接口登陆状态校验+mock跳转登陆页面修改登陆状态场景
+8、新增emitter
 
 9、其它功能正在开发......
 
