@@ -26,7 +26,7 @@ export default class EntryAbility extends UIAbility {
       statusBarContentColor: '#000000'
     })
 
-    windowStage.loadContent('pages/Index', this.storage, (err, data) => {
+    windowStage.loadContent('pages/WelcomePage', this.storage, (err, data) => {
       if (err.code) {
         logger.error('Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;

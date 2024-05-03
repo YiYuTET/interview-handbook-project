@@ -80,20 +80,18 @@ struct WelcomePage {
 
             // 3.文字描述
             Row() {
-                Text('面试宝典').opacityWhiteText(0.8, 12)
+                Text('面试宝典').opacityWhiteText(0.8, 14)
                 Text('IPv6')
-                    .opacityWhiteText(0.8)
+                    .opacityWhiteText(0.8, 12)
                     .border({ style: BorderStyle.Solid, width: 1, color: Color.White, radius: 15 })
                     .padding({ left: 5, right: 5 })
-                Text('网络').opacityWhiteText(0.8, 12)
+                Text('网络').opacityWhiteText(0.8, 14)
             }
 
-            Text('')
-                .opacityWhiteText(0.6)
             Text('Copyright©2024 By YiYuTET BY-NC-SA 4.0')
-                .opacityWhiteText(0.6)
+                .opacityWhiteText(0.6, 12)
             Text('赣ICP备2022002607号')
-                .opacityWhiteText(0.4)
+                .opacityWhiteText(0.4, 12)
                 .margin({ bottom: 35 })
 
         }
