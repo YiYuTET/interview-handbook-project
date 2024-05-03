@@ -12,8 +12,7 @@ const httpRequest = http.createHttp()
 export const BaseURL = 'https://api-harmony-teach.itheima.net/hm/'
 // export const BaseURL = 'http://172.17.2.113:7003/hm/'
 
-const request = <T = unknown>(url: string = '', method: http.RequestMethod = http.RequestMethod.GET, data: object = {
-}) => {
+const request = <T = unknown>(url: string = '', method: http.RequestMethod = http.RequestMethod.GET, data: object = {}) => {
 
   let urlStr = BaseURL + url
   if (method === http.RequestMethod.GET) {
