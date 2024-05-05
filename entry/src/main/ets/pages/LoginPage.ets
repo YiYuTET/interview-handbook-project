@@ -108,6 +108,11 @@ struct LoginPage {
               Text('用户协议')
                 .fontSize(vp2vp(14))
                 .padding({ right: vp2vp(4) })
+                .onClick(() => {
+                  router.pushUrl({
+                    url: PAGE_MAP.user_license
+                  })
+                })
               Text('和')
                 .fontSize(vp2vp(14))
                 .fontColor($r('app.color.ih_gray_color'))

@@ -151,9 +151,7 @@ export struct HomePage {
 
       if (this.questionTypes.length) {
         Row() {
-          Tabs({
-            index: this.activeIndex
-          }) {
+          Tabs({ index: this.activeIndex }) {
             ForEach(this.questionTypes, (item, index) => {
               TabContent() {
                 QuestionList({

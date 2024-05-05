@@ -13,12 +13,14 @@ struct WelcomePage {
     @State taskId1 : number = 0
     @State taskId2 : number = 0
     jumpToIndex(){
+        //页面自动跳转定时器
         this.taskId1 = setTimeout(() => {
             router.replaceUrl({
                 url: 'pages/Index'
             })
         }, 3100)
 
+        //进度条增加定时器
         this.taskId2 = setInterval(() => {
             this.value += 2
             if(this.value >= 100){
@@ -43,6 +45,7 @@ struct WelcomePage {
                      // .animation({ duration: 100, curve: Curve.Ease })
             }
             .margin({top : 20, left: 280 })
+            //点击跳过
             .onClick(() => {
                 if(this.taskId1){
                     clearTimeout(this.taskId1)
@@ -57,9 +60,10 @@ struct WelcomePage {
 
 
             Column() {
-                //logo
+                //logo图片
                 Image($r('app.media.logo')).width(260)
 
+                //应用名
                 Text('鸿蒙应用 面试宝典')
                     .fontSize(32)
                     .fontWeight(800)
@@ -78,7 +82,7 @@ struct WelcomePage {
             .layoutWeight(1)
 
 
-            // 3.文字描述
+            // 底部文字描述
             Row() {
                 Text('面试宝典').opacityWhiteText(0.8, 14)
                 Text('IPv6')

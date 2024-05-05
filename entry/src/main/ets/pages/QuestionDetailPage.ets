@@ -190,10 +190,7 @@ struct QuestionDetailPage {
                       action: () => {
                         this.opt(1, this.question.likeFlag).then(() => {
                           this.question.likeFlag = this.question.likeFlag === 1 ? 0 : 1
-                          const likeCount =
-                              this.question.likeFlag === 1
-                              ? Number(this.question.likeCount) + 1
-                              : Number(this.question.likeCount) - 1
+                          const likeCount = this.question.likeFlag === 1 ? Number(this.question.likeCount) + 1 : Number(this.question.likeCount) - 1
                           emitter.emit({ eventId: EVENT_MAP.update_question_list }, {
                             data: { id: this.question.id, likeCount, }
                           })
