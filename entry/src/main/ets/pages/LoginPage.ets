@@ -33,7 +33,7 @@ struct LoginPage {
     this.loading = true
     requestPost('login', {
       username: this.mobile,
-      password: this.code
+        password: this.code
     }).then((res: ResponseData<UserInfo>) => {
       AppStorage.Set('user', JSON.stringify(res.data))
 

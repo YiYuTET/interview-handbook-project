@@ -5,7 +5,7 @@ import { vp2vp } from '../utils/base'
 import page from '../utils/router'
 @Entry
 @Component
-struct ProjectListPage {
+struct c {
 
   @State
   projectId: number = undefined
@@ -23,7 +23,8 @@ struct ProjectListPage {
       Flex({ direction: FlexDirection.Column }){
         Row() {
           SearchWrapper({
-            bg: 'rgba(246,247,249,0.64)',
+            // bg: 'rgba(246,247,249,0.64)',
+            bg: '#ffffff',
             textColor: '#ffffff'
           })
         }.padding({ left: vp2vp(15), right: vp2vp(15), top: vp2vp(15), bottom: vp2vp(30) })

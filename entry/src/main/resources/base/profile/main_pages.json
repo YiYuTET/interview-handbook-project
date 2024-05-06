@@ -11,6 +11,7 @@
     "pages/PreviewWebPage",
     "pages/RegisterPage",
     "pages/WelcomePage",
-    "pages/UserLicensePage"
+    "pages/UserLicensePage",
+    "pages/FavoritePage"
   ]
 }

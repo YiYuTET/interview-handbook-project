@@ -16,7 +16,8 @@ export const PAGE_MAP = {
   profile_edit: 'pages/ProfileEditPage',
   study_time: 'pages/StudyTimePage',
   preview_web: 'pages/PreviewWebPage',
-  user_license: 'pages/UserLicensePage'
+  user_license: 'pages/UserLicensePage',
+  favorite: 'pages/FavoritePage'
 }
 
 export const EVENT_MAP = {

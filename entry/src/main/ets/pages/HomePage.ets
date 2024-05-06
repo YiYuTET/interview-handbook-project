@@ -45,7 +45,6 @@ export struct HomePage {
         message: '网络请求失败'
       })
     })
-
   }
 
   @Builder

@@ -15,24 +15,43 @@ export struct ProjectPage {
     // setTimeout(() => {
     //   this.projectList = [
     //     {
-    //       id: 1,
-    //       name: '后台管理系统',
-    //       icon: '',
-    //       describeInfo: '以Vue技理后台后台管理系统面试题面试整理',
-    //       tags: [
-    //         { tagName: '项目必问' }
+    //       "id": 396,
+    //       "name": "后台管理系统",
+    //       "icon": "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/teach/%E5%9B%BE%E6%A0%87/%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%B0%81%E9%9D%A2.png",
+    //       "describeInfo": "以vue技术栈为例的后台管理系统面试题整理",
+    //       "displayNewestFlag": 0,
+    //       "tags": [
+    //         {
+    //           "tagName": "人资项目",
+    //           "nameColor": "#e9e5ff",
+    //           "borderColor": "#a192fc"
+    //         }
     //       ]
     //     },
     //     {
-    //       id: 2,
-    //       name: '在线问医生平台（医疗类）',
-    //       icon: '',
-    //       describeInfo: '通过vue3+ts实现的在线医疗问诊相关技术整理',
-    //       tags: [
-    //         { tagName: '项目必问' }
+    //       "id": 397,
+    //       "name": "在线问医平台(医疗类)",
+    //       "icon": "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/teach/%E5%9B%BE%E6%A0%87/%E5%8C%BB%E7%96%97%E5%B0%81%E9%9D%A2.png",
+    //       "describeInfo": "通过vue3+ts实现的在线医疗问诊相关技术整理",
+    //       "displayNewestFlag": 0,
+    //       "tags": [
+    //         {
+    //           "tagName": "在线医疗",
+    //           "nameColor": "#e7f4dc",
+    //           "borderColor": "#8ad94d"
+    //         },
+    //         {
+    //           "tagName": "socket",
+    //           "nameColor": "#fdecee",
+    //           "borderColor": "#e3848e"
+    //         },
+    //         {
+    //           "tagName": "vue3+ts",
+    //           "nameColor": "#fdecee",
+    //           "borderColor": "#e3848e"
+    //         }
     //       ]
     //     }
-    //   ]
     // }, 1000)
     requestGet('question/type', { type: 'items' })
       .then((res: ResponseData<QuestionType[]>) => {

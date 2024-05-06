@@ -142,7 +142,12 @@ export struct MinePage {
               .fontColor($r('app.color.ih_gray_color'))
               .fontSize(vp2vp(14))
           }
-        }
+        }.onClick(()=>{
+          router.push({
+            url: PAGE_MAP.favorite
+          })
+        })
+
 
         GridCol() {
           Column() {
