@@ -50,7 +50,10 @@ struct LoginPage {
         })
       } else {
         router.clear()
-        router.back({
+        // router.back({
+        //   url: 'pages/Index'
+        // })
+        router.replaceUrl({
           url: 'pages/Index'
         })
       }
