@@ -89,6 +89,7 @@ struct Index {
     .onChange((index) => {
       this.activeIndex = index
     })
-    .barHeight(vp2vp(50))
+    // .barHeight(vp2vp(50))
+    .barHeight(this.isLandscape?"100%":vp2vp(50))
   }
 }

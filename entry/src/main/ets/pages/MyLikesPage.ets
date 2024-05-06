@@ -44,14 +44,14 @@ class QuestionDataSource extends BasicDataSource {
 
 @Entry
 @Component
-export default struct FavoritePage {
+export default struct MyLikesPage {
     @State
     loading: boolean = false
     @State
     finished: boolean = false
     // @LocalStorageLink('sharedFavoriteQuestionList')
     @State
-    sharedFavoriteQuestionList: Array<QuestionItem> = []
+    sharedLikesQuestionList: Array<QuestionItem> = []
     @State
     total: number = 0
     @State
@@ -63,7 +63,7 @@ export default struct FavoritePage {
         page: number,
         questionBankType: number
     } = {
-        optType: 2, //1：点赞，2：收藏
+        optType: 1, //1：点赞，2：收藏
         pageSize: 10,
         page: 1,
         questionBankType: 10,
@@ -81,7 +81,7 @@ export default struct FavoritePage {
     }
 
     initQuestionList() {
-        this.sharedFavoriteQuestionList = []
+        this.sharedLikesQuestionList = []
         this.loadQuestionList()
     }
 
@@ -98,7 +98,7 @@ export default struct FavoritePage {
                 // this.questionList.push(...res.data.rows)
                 this.questionDataSource.pushData(res.data.rows)
                 // 存储 LocalStorage
-                this.sharedFavoriteQuestionList.push(...res.data.rows)
+                this.sharedLikesQuestionList.push(...res.data.rows)
                 this.total = res.data.total
                 this.pageTotal = res.data.pageTotal
                 if (this.params.page >= this.pageTotal) {
@@ -157,11 +157,11 @@ export default struct FavoritePage {
                                 .margin({ top: vp2vp(10) })
                             }.onClick(() => {
                                 router.push({
-                                    url: 'pages/FavoriteQuestionDetailPage',
+                                    url: 'pages/MyLikesDetailPage',
                                     params: {
                                         id: item.id,
                                         stem: item.stem,
-                                        sharedFavoriteQuestionList: this.sharedFavoriteQuestionList
+                                        sharedLikesQuestionList: this.sharedLikesQuestionList
                                     }
                                 })
                             })
@@ -194,7 +194,7 @@ export default struct FavoritePage {
             })
         }
         .mode(NavigationMode.Stack)
-        .title('我的收藏')
+        .title('我的点赞')
         .titleMode(NavigationTitleMode.Mini)
     }
 }

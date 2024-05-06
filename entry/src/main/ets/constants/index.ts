@@ -17,7 +17,8 @@ export const PAGE_MAP = {
   study_time: 'pages/StudyTimePage',
   preview_web: 'pages/PreviewWebPage',
   user_license: 'pages/UserLicensePage',
-  favorite: 'pages/FavoritePage'
+  favorite: 'pages/FavoritePage',
+  my_likes: 'pages/MyLikesPage',
 }
 
 export const EVENT_MAP = {

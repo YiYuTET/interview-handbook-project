@@ -12,6 +12,9 @@
     "pages/RegisterPage",
     "pages/WelcomePage",
     "pages/UserLicensePage",
-    "pages/FavoritePage"
+    "pages/FavoritePage",
+    "pages/FavoriteQuestionDetailPage",
+    "pages/MyLikesPage",
+    "pages/MyLikesDetailPage"
   ]
 }
