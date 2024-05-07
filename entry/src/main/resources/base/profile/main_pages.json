@@ -1,0 +1,24 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/QuestionDetailPage",
+    "pages/LoginPage",
+    "pages/ClockPage",
+    "pages/ProjectListPage",
+    "pages/InterviewDetailPage",
+    "pages/ProfileEditPage",
+    "pages/StudyTimePage",
+    "pages/PreviewWebPage",
+    "pages/RegisterPage",
+    "pages/WelcomePage",
+    "pages/UserLicensePage",
+    "pages/FavoritePage",
+    "pages/FavoriteQuestionDetailPage",
+    "pages/MyLikesPage",
+    "pages/MyLikesDetailPage",
+    "pages/AboutUsPage",
+    "pages/QualificationPage",
+    "pages/ReportInformationPage",
+    "pages/webContentPage"
+  ]
+}

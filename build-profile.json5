@@ -1,0 +1,54 @@
+{
+  "app": {
+//    "signingConfigs": [
+//      {
+//        "name": "default",
+//        "type": "HarmonyOS",
+//        "material": {
+//          "storePassword": "000000186275A7A44790662FC6F47C136F0D9BE022B9BB63F1114F586780B99955684B05E0634E20",
+//          "certpath": "/Users/zhousg/Downloads/interview-handbook-pro.cer",
+//          "keyAlias": "interview-handbook",
+//          "keyPassword": "00000018346B2C91EAE8E856656F86B2BC983243FF560AFF9726D2748BAEAF68BA8D7909511523F5",
+//          "profile": "/Users/zhousg/Downloads/interview-handbook-proRelease.p7b",
+//          "signAlg": "SHA256withECDSA",
+//          "storeFile": "/Users/zhousg/interview-handbook.p12"
+//        }
+//      },
+//      {
+//        "name": "local",
+//        "type": "HarmonyOS",
+//        "material": {
+//          "certpath": "/Users/zhousg/.ohos/config/auto_debug_InterviewHandbook_com.itcast.interviewhandbook_2850086000490906495.cer",
+//          "storePassword": "0000001A4D25D706EC65485FA8D3D163AE824F94D5CFC7B828A700365D662E36379B42DE1FC3C115A14C",
+//          "keyAlias": "debugKey",
+//          "keyPassword": "0000001A630593A7671F825B4F10C229888EABFCCD87F712676992CB86D3E5470D6962C3E04716242D79",
+//          "profile": "/Users/zhousg/.ohos/config/auto_debug_InterviewHandbook_com.itcast.interviewhandbook_2850086000490906495.p7b",
+//          "signAlg": "SHA256withECDSA",
+//          "storeFile": "/Users/zhousg/.ohos/config/auto_debug_InterviewHandbook_com.itcast.interviewhandbook_2850086000490906495.p12"
+//        }
+//      }
+//    ],
+    "compileSdkVersion": 9,
+    "compatibleSdkVersion": 9,
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

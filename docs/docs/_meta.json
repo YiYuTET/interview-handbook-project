@@ -1,0 +1,16 @@
+[
+  {
+    "text": "指南",
+    "link": "/guide/",
+    "activeMatch": "/guide/"
+  },
+  {
+    "text": "项目",
+    "link": "/project/",
+    "activeMatch": "/project/"
+  },
+  {
+    "text": "HarmonyOS文档",
+    "link": "https://developer.harmonyos.com/cn/docs/documentation/doc-references-V3/development-intro-0000001478061813-V3"
+  }
+]
