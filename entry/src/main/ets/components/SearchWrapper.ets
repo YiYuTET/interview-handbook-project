@@ -27,7 +27,7 @@ export default struct SearchWrapper {
     .backgroundColor(this.bg)
     .height(vp2vp(32))
     .borderRadius(vp2vp(16))
-    .width('100%')
+    .width('90%')
     .justifyContent(this.alignValue)
   }
 }
