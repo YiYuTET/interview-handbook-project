@@ -15,6 +15,9 @@
     "pages/FavoritePage",
     "pages/FavoriteQuestionDetailPage",
     "pages/MyLikesPage",
-    "pages/MyLikesDetailPage"
+    "pages/MyLikesDetailPage",
+    "pages/AboutUsPage",
+    "pages/QualificationPage",
+    "pages/ReportInformationPage"
   ]
 }

@@ -238,6 +238,11 @@ export struct MinePage {
               .width(vp2vp(18))
               .height(vp2vp(18))
           }
+          .onClick(()=>{
+            router.push({
+              url: 'pages/AboutUsPage'
+            })
+          })
           .width('100%')
           .justifyContent(FlexAlign.SpaceBetween)
           .padding({ left: vp2vp(15), right: vp2vp(15) })

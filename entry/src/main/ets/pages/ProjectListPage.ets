@@ -5,7 +5,7 @@ import { vp2vp } from '../utils/base'
 import page from '../utils/router'
 @Entry
 @Component
-struct c {
+struct ProjectListPage {
 
   @State
   projectId: number = undefined
