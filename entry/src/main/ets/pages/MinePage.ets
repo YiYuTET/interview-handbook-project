@@ -227,6 +227,11 @@ export struct MinePage {
           .width('100%')
           .justifyContent(FlexAlign.SpaceBetween)
           .padding({ left: vp2vp(15), right: vp2vp(15) })
+          .onClick(()=>{
+            router.push({
+              url: 'pages/FeedbackPage'
+            })
+          })
         }
         .height(vp2vp(46))
 

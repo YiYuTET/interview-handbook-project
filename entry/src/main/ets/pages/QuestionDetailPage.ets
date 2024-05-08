@@ -29,6 +29,11 @@ struct QuestionDetailPage {
   @State
   timeList: {questionId: string, startTime: number, endTime: number}[] = []
 
+
+  @State
+  isShowPanel : boolean = false
+
+
   aboutToDisappear() {
     this.timeList.push({
       questionId: this.question.id,
@@ -200,7 +205,7 @@ struct QuestionDetailPage {
                     {
                       value: '分享试题',
                       action: () => {
-                        // TODO
+                        this.isShowPanel = true
                       }
                     },
                   ])
@@ -229,6 +234,36 @@ struct QuestionDetailPage {
           .layoutWeight(1)
         }.layoutWeight(1)
       }
+      .layoutWeight(1)
+
+      Panel(this.isShowPanel){
+        Row({space:30}){
+          Column({space:10}){
+            Image($r("app.media.icon64_appwx_logo")).width(30)
+            Text("微信")
+          }
+          .onClick(()=>{
+            this.isShowPanel=false
+            AlertDialog.show({
+              title:"分享到：微信",
+              message:"未安装微信"
+            })
+          })
+          Column({space:10}){
+            Image($r("app.media.icon_res_download_moments")).width(30)
+            Text("朋友圈")
+          }
+          .onClick(()=>{
+            this.isShowPanel=false
+            AlertDialog.show({
+              title:"分享到：朋友圈",
+              message:"未安装微信"
+            })
+          })
+        }
+      }
+      .height(180)
+      .dragBar(false)
     }
     .title('题目详情')
     .titleMode(NavigationTitleMode.Mini)

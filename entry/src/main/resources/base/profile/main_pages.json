@@ -18,6 +18,10 @@
     "pages/MyLikesDetailPage",
     "pages/AboutUsPage",
     "pages/QualificationPage",
-    "pages/ReportInformationPage"
+    "pages/ReportInformationPage",
+    "pages/SurveyPage",
+    "pages/RegisterPage1",
+    "pages/webContentPage",
+    "pages/FeedbackPage"
   ]
 }

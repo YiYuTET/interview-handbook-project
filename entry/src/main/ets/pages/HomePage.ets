@@ -6,6 +6,8 @@ import SearchWrapper from '../components/SearchWrapper'
 import { requestGet } from '../utils/request'
 import logger from '../utils/logger'
 import { vp2vp } from '../utils/base'
+import router from '../utils/router'
+import { PAGE_MAP } from '../constants'
 
 @Preview
 @Component
@@ -137,10 +139,24 @@ export struct HomePage {
 
           Flex() {
             Image($rawfile('banner_pj.png')).objectFit(ImageFit.Fill)
+              .onClick(()=> {
+                router.push({
+                  url: PAGE_MAP.project_list,
+                  params: {
+                    id: 0,
+                    name: '后台管理系统',
+                  }
+                })
+              })
           }.padding({ left: vp2vp(15), right: vp2vp(15) })
 
           Flex() {
             Image($rawfile('banner_ai.png')).objectFit(ImageFit.Fill)
+              .onClick(()=> {
+                router.push({
+                  url:"pages/webContentPage"
+                })
+              })
           }.padding({ left: vp2vp(15), right: vp2vp(15) })
         }
         .autoPlay(true)

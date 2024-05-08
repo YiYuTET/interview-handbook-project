@@ -1,5 +1,6 @@
 import { vp2vp } from '../utils/base'
 import router from '@ohos.router'
+import promptAction from '@ohos.promptAction'
 
 @Component
 struct MyCard{
@@ -41,6 +42,11 @@ struct AboutUsPage{
                         Column(){
                             MyCard({name : '评价宝典'})
                             MyCard({name : '宝典资质'})
+                                .onClick(() => {
+                                    router.pushUrl({
+                                        url: 'pages/QualificationPage'
+                                    })
+                                })
                             MyCard({name : '宝典规则'})
                             MyCard({name : '举报信息'})
                                 .onClick(() => {
@@ -49,13 +55,15 @@ struct AboutUsPage{
                                     })
                                 })
                             MyCard({name : '版权信息'})
+
+                            MyCard({name : '热线电话', num : '10086'})
+                            MyCard({name : '检查更新', num : 'v1.0.0'})
                                 .onClick(() => {
-                                    router.pushUrl({
-                                        url: 'pages/QualificationPage'
+                                    promptAction.showToast({
+                                        message: '已是最新版本',
+                                        duration: 200
                                     })
                                 })
-                            MyCard({name : '热线电话', num : '10086'})
-                            MyCard({name : '检查更新', num : '好赞，当前已是最新版本'})
                         }.margin({top:vp2vp(20)})
                         .backgroundColor('#F5F5F5')
                         .border({width:1})
